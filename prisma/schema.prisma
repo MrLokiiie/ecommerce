@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String    @id @default(uuid())
+  username          String
+  password          String
+  hashedPassword    String
+  
+  email             String    @unique @map("_email")
+  emailConfirmed    Boolean   @default(false)
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  account_cookie    String    @unique @map("_cookie")
+
+  stores            Store[]
+  purchases         Purchase[]
+}
+
+model Store {
+  id                String    @id @default(uuid())
+  ownerId           String    @unique
+  storeName         String    @db.Text
+  storeDescription  String    @db.Text
+
+  isPublic          Boolean   @default(false)
+
+  owner             Account   @relation(fields: [ownerId], references: [id])
+
+  purchases         Purchase[]
+  product           Product[]
+}
+
+model Product {
+  id                String   @id @default(uuid())
+  storeId           String
+  productName       String
+  productPrice      Int      @default(0)
+  isHidden          Boolean?
+
+  fileContent       String   @db.Text
+  fileName          String
+
+  store             Store    @relation(fields: [storeId], references: [id])
+
+  purchases         Purchase[]
+}
+
+model Purchase {
+  id                String   @id @default(uuid())
+  productId         String   @unique
+  storeId           String   @unique
+
+  purchasedUserId   String   @db.Text
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  product           Product  @relation(fields: [productId], references: [id])
+  store             Store    @relation(fields: [storeId], references: [id])
+  account           Account  @relation(fields: [purchasedUserId], references: [id])
+}
+
+model Authencation {
+  id                String   @id @default(uuid())
+  accessToken       String   @default(cuid())
+}
+
+model ContactInformation {
+  id                String  @id @default(uuid())
+  
+  firstName         String
+  lastName          String
+
+  phoneNumber       String
+}
