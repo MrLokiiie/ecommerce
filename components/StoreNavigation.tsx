@@ -1,10 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Trash2 } from "lucide-react";
 
-import { Product, Purchase } from "@prisma/client";
+import { Product, Purchase, Store } from "@prisma/client";
 
 import { useCreateProduct } from "@/hooks/useCreateProduct";
+import { useDeleteStore } from "@/hooks/use-delete-store";
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -13,14 +16,22 @@ interface StoreNavigationProps {
   products: Product[];
   purchases: Purchase[];
   storeId: string;
+  store: Store;
 }
 
 export const StoreNavigation = ({
   products,
   purchases,
   storeId,
+  store
 }: StoreNavigationProps) => {
   const createProduct = useCreateProduct();
+  const deleteStore = useDeleteStore();
+  const router = useRouter();
+
+  if (!store || !store.id) {
+    router.push('/dashboard');
+  }
 
   const totalSales = purchases?.reduce((total, purchase) => {
     const product = products?.find((product) => product.id === purchase.productId);
@@ -63,7 +74,15 @@ export const StoreNavigation = ({
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center">
+          <Button 
+            variant="destructive" 
+            className="mr-6"
+            size="icon" 
+            onClick={deleteStore.onOpen}
+          >
+            <Trash2 className="h-6 w-6" />
+          </Button>
           <Button className="rounded-lg hover:bg-secondary hover:text-primary" onClick={createProduct.onOpen}>Create a Product</Button>
         </div>
       </div>

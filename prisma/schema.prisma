@@ -27,6 +27,7 @@ model Account {
 
   stores            Store[]
   purchases         Purchase[]
+  personal          PersonalInformation[]
 }
 
 model Store {
@@ -85,4 +86,17 @@ model ContactInformation {
   lastName          String
 
   phoneNumber       String
+}
+
+model PersonalInformation {
+  id                String  @id @default(uuid())
+  userId            String  @unique
+
+  firstName         String
+  lastName          String
+  
+  creditCardNumber  String  @db.Text @map("credit_card_number")
+  creditCardCode    String  @map("credit_card_code")
+
+  user              Account @relation(fields: [userId], references: [id])
 }

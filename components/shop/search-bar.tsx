@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SeachFilter } from "@/components/shop/seach-filter";
 
 interface SearchBarProps {}
 
@@ -25,12 +24,20 @@ export const SearchBar = ({}: SearchBarProps) => {
     } else {
       const replaceSpaces = searchInput.replace(" ", "_");
       console.log(replaceSpaces, searchFilter);
+
+      const queryToJSON = JSON.stringify({
+        filter: searchFilter,
+        ctx: searchInput
+      });
+
+      const setSearchQuery = window.localStorage.setItem("searchFilter", queryToJSON);
+      
+      router.push(`/shop/search/${searchInput.replace(" ", "_")}`);
     }
   }
 
   return (
     <div className="flex items-center justify-center flex-row">
-      <SeachFilter searchFilter={searchFilter} setSearchFilter={SetSearchFilter} />
       <div
         className="
           flex
