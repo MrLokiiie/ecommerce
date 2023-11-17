@@ -4,10 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
-import { Product, Purchase, Store } from "@prisma/client";
+import { PersonalInformation, Product, Purchase, Store } from "@prisma/client";
 
 import { useCreateProduct } from "@/hooks/useCreateProduct";
 import { useDeleteStore } from "@/hooks/use-delete-store";
+import { useCreateInformation } from "@/hooks/use-create-information";
 
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -17,16 +18,19 @@ interface StoreNavigationProps {
   purchases: Purchase[];
   storeId: string;
   store: Store;
+  personalInformation: PersonalInformation;
 }
 
 export const StoreNavigation = ({
   products,
   purchases,
   storeId,
-  store
+  store,
+  personalInformation
 }: StoreNavigationProps) => {
   const createProduct = useCreateProduct();
   const deleteStore = useDeleteStore();
+  const createInformation = useCreateInformation();
   const router = useRouter();
 
   if (!store || !store.id) {
@@ -83,7 +87,12 @@ export const StoreNavigation = ({
           >
             <Trash2 className="h-6 w-6" />
           </Button>
-          <Button className="rounded-lg hover:bg-secondary hover:text-primary" onClick={createProduct.onOpen}>Create a Product</Button>
+          <Button 
+            className="rounded-lg hover:bg-secondary hover:text-primary" 
+            onClick={!personalInformation ? createInformation.onOpen : createProduct.onOpen}
+          >
+            {createInformation ? "Add Information" : "Create Product"}
+          </Button>
         </div>
       </div>
     </div>

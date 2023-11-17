@@ -20,7 +20,11 @@ export class SearchAi<Index extends SearchAiIndex<string, SearchAiFilterIndex, s
     const replacedCtx = ctx?.replace("_", " ");
 
     // Create a variable named "products" and get all the products (.findMany()) and await it.
-    const products = await db.product.findMany();
+    const products = await db.product.findMany({
+      include: {
+        productsImage: true
+      }
+    });
 
     // Filter the products.
     const filterProducts = products.filter((product) => 

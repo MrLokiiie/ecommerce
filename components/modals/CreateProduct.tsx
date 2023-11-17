@@ -18,22 +18,21 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
-
+import { PersonalInformation } from "@prisma/client";
 interface ModalProps {
   storeId: string;
+  personalInformation: PersonalInformation;
 }
 
 export const CreateProductModal = ({
-  storeId
+  storeId,
+  personalInformation
 }: ModalProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const router = useRouter();
   const createProduct = useCreateProduct();
-
   const [isMounted, setMounted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [fileName, setFileName] = useState<string>("");
   const [fileContent, setFileContent] = useState<string>("");
 

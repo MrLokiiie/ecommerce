@@ -57,6 +57,7 @@ model Product {
   store             Store    @relation(fields: [storeId], references: [id])
 
   purchases         Purchase[]
+  productsImage     ProductImage[]
 }
 
 model Purchase {
@@ -77,6 +78,15 @@ model Purchase {
 model Authencation {
   id                String   @id @default(uuid())
   accessToken       String   @default(cuid())
+}
+
+model ProductImage {
+  id                    String    @id @default(uuid())
+  productId             String    @unique
+
+  placeholderImageText  String
+
+  product               Product @relation(fields: [productId], references: [id])
 }
 
 model ContactInformation {
