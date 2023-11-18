@@ -23,9 +23,9 @@ export async function POST(request: Request) {
     } = body;
 
     if (!productPrice || !productName || !storeId || !fileContent || !fileName || 
-      placeholderImageText
+      !placeholderImageText
     ) {
-      return new NextResponse("Invalid transport data.", { status: 400 });
+      return new NextResponse("Invalid transport data", { status: 400 });
     }
 
     const checkStore = await db.store.findUnique({
@@ -43,6 +43,8 @@ export async function POST(request: Request) {
     }
 
     let productPriceToNumber = parseInt(productPrice);
+
+    await db.product.deleteMany();
 
     const createProduct = await db.product.create({
       data: {

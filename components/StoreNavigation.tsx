@@ -43,7 +43,7 @@ export const StoreNavigation = ({
     
     /// @ts-ignore
     return total + price;
-  }, 0); 
+  }, 0);
 
   return (
     <div>
@@ -91,7 +91,7 @@ export const StoreNavigation = ({
             className="rounded-lg hover:bg-secondary hover:text-primary" 
             onClick={!personalInformation ? createInformation.onOpen : createProduct.onOpen}
           >
-            {createInformation ? "Add Information" : "Create Product"}
+            {!personalInformation ? "Add Information" : "Create Product"}
           </Button>
         </div>
       </div>

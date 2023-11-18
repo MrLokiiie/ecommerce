@@ -5,8 +5,9 @@ interface CreateInformation {
   currentUser: Account;
 }
 
+import axios from "axios";
 import { useState } from "react";
-import { useForm, FieldValues, SubmitHandler, set } from "react-hook-form";
+import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Account, PersonalInformation } from "@prisma/client";
 
@@ -21,7 +22,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { serverActions } from "@/tools/server-actions";
 
 export const CreateInformation: React.FC<CreateInformation> = ({ initalData, currentUser }) => {
   const createInformation = useCreateInformation();
@@ -43,7 +43,7 @@ export const CreateInformation: React.FC<CreateInformation> = ({ initalData, cur
       }
     }
   });
-  
+
   const onSubmit: SubmitHandler<FieldValues> = async (values) => {
     try {
       setIsLoading(true);
@@ -55,26 +55,29 @@ export const CreateInformation: React.FC<CreateInformation> = ({ initalData, cur
         creditCardCode: string;
       }
 
-      const data: CreateInformationData = {
+      const data = {
         firstName: values.firstName,
         lastName: values.lastName,
         creditCardNumber: values.creditCardNumber,
         creditCardCode: values.creditCardCode
       };
 
-      const createInformationAction = await serverActions.createInformation(data, currentUser.id);
+      const transport = JSON.parse(JSON.stringify(data));
+      console.log(transport);
 
-      console.log(createInformationAction);
+      const createUserInformation = await axios.post(`/api/user/${currentUser.id}`, {
+        ...transport
+      });
+
       toast.success("Success!");
     } catch (error: any) {
       console.log(error);
       toast.error("Something went wrong!");
     } finally {
       setIsLoading(false);
+      createInformation.onClose();
     }
   }
-
-  const shouldBeOpen = createInformation.isOpen ? true : false;
 
   return (
     <Dialog open={createInformation.isOpen} onOpenChange={createInformation.onClose}>

@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { useRouter } from "next/navigation";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -29,12 +29,15 @@ export const CreateProductModal = ({
   personalInformation
 }: ModalProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+
   const router = useRouter();
   const createProduct = useCreateProduct();
   const [isMounted, setMounted] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string>("");
   const [fileContent, setFileContent] = useState<string>("");
+  const [placeholderImageText, setPlaceholderImageText] = useState<string>("");
 
   useEffect(() => {
     setMounted(true);
@@ -71,6 +74,7 @@ export const CreateProductModal = ({
         fileContent,
         productName: values.productName,
         productPrice: newProductPrice,
+        placeholderImageText,
       }));
 
       const createProduct = await axios.post('/api/product', {
@@ -88,8 +92,12 @@ export const CreateProductModal = ({
     }
   }
 
-  const handleButtonClick = () => {
-    fileInputRef.current?.click();
+  const handleButtonClick = (isFile: boolean) => {
+    if (isFile) {
+      fileInputRef.current?.click();
+    } else {
+      imageInputRef.current?.click();
+    }
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,6 +115,20 @@ export const CreateProductModal = ({
 
     const text = reader.readAsText(file);
   };
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /// @ts-ignore
+    const file = event.target.files[0]
+    const reader = new FileReader();
+    
+    const fileReader = reader.onload = (e) => {
+      const imageContent = e.target?.result;
+
+      setPlaceholderImageText(`${imageContent}`);
+    }
+
+    const text = reader.readAsText(file);
+  }
 
   return (
     <Dialog open={createProduct.isOpen} onOpenChange={createProduct.onClose}>
@@ -139,8 +161,15 @@ export const CreateProductModal = ({
             <div className="mb-4 space-y-4">
               <label htmlFor="downloadContent" className="text-center text-primary font-bold">Download Content</label>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} style={{ display: 'none' }} />
-              <Button type="button" className="w-full" onClick={handleButtonClick}>
+              <Button type="button" className="w-full" onClick={() => handleButtonClick(true)}>
                 Select File
+              </Button>
+            </div>
+            <div className="mb-4 space-y-4">
+              <label className="text-center text-primary font-bold">Choose Image</label>
+              <input type="file" ref={imageInputRef} onChange={handleImageChange} style={{ display: 'none' }} />
+              <Button type="button" className="w-full" onClick={() => handleButtonClick(false)}>
+                Select Image
               </Button>
             </div>
             <div className="w-full py-[0.0750px] rounded-full bg-black mt-6 mb-6" />

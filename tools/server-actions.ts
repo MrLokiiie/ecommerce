@@ -9,30 +9,20 @@ type CreateInformationData = {
   creditCardCode: string;
 }
 
-interface ServerActions {
-  createInformation: (data: CreateInformationData, userId: string) => void;
-}
-
-export const serverActions: ServerActions = {
-  async createInformation(data, userId) {
-    const updateInformation = await db.personalInformation.create({
+export async function createUserInformation(data: CreateInformationData, userId: string) {
+  try {
+    const createUserInformationAction = await db.personalInformation.create({
       data: {
         userId,
         firstName: data.firstName,
         lastName: data.lastName,
         creditCardCode: data.creditCardCode,
         creditCardNumber: data.creditCardNumber,
-      },
-      include: {
-        user: true
       }
     });
-    console.log(updateInformation);
-
-    if (!updateInformation || !updateInformation.id) {
-      return 500;
-    }
-
-    return 200;
-  },
-};
+  
+    return createUserInformationAction; 
+  } catch (error: any) {
+    console.log(`[SERVER_ACTIONS_USER_INFORMATION_CREATE] # There was an error creating the information. Error: ${error}`);
+  }
+}
