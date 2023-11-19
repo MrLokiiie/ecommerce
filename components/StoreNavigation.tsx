@@ -67,7 +67,8 @@ export const StoreNavigation = ({
               {products.map((product) => (
                 <div>
                   <DropdownMenuItem>
-                    <Link 
+                    <Link
+                      className="w-full"
                       href={`/dashboard/store/${storeId}/products/${product.id}`}
                     >
                       {product.productName}

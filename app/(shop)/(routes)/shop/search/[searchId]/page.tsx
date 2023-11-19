@@ -9,6 +9,7 @@ import { SearchAi } from "@/tools/ai";
 
 import { SearchResponse } from "@/components/shop/search-response";
 import { Button } from "@/components/ui/button";
+import { GetStoreNameByProductId } from "@/tools/get-store-name-product-id";
 
 const SearchPage = async ({ params }: SearchPageProps) => {
   const ai = new SearchAi();
@@ -29,7 +30,7 @@ const SearchPage = async ({ params }: SearchPageProps) => {
           </Button>
         </div>
       </div>
-      <SearchResponse product={filteredProducts} />
+      <SearchResponse products={filteredProducts} />
     </div>
   )
 }

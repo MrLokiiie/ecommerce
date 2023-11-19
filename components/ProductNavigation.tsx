@@ -23,6 +23,8 @@ export const ProductNavigation: React.FC<ProductNavigationProps> = ({
   const productModal = useProductModal();
   const deleteProduct = useDeleteProduct();
 
+  console.log(product.productName)
+
   return (
     <>
       <div>

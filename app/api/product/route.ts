@@ -19,12 +19,9 @@ export async function POST(request: Request) {
       fileName,
       storeId,
       fileContent,
-      placeholderImageText,
     } = body;
 
-    if (!productPrice || !productName || !storeId || !fileContent || !fileName || 
-      !placeholderImageText
-    ) {
+    if (!productPrice || !productName || !storeId || !fileContent || !fileName) {
       return new NextResponse("Invalid transport data", { status: 400 });
     }
 
@@ -44,8 +41,6 @@ export async function POST(request: Request) {
 
     let productPriceToNumber = parseInt(productPrice);
 
-    await db.product.deleteMany();
-
     const createProduct = await db.product.create({
       data: {
         storeId,
@@ -54,16 +49,6 @@ export async function POST(request: Request) {
         fileName: `${fileName}` as string,
         productPrice: productPriceToNumber,
         isHidden: false,
-      }
-    });
-
-    const createImageForProduct = await db.productImage.create({
-      data: {
-        productId: createProduct.id,
-        placeholderImageText,
-      },
-      include: {
-        product: true
       }
     });
 

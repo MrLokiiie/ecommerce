@@ -1,6 +1,7 @@
 import { CreditCard, DollarSign, Package } from "lucide-react";
 
 import { getCurrentUser } from "@/tools/CurrentUser";
+import { Account, Product } from "@prisma/client";
 
 import { Overview } from "@/components/ProductOverview";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +20,7 @@ import { ProductNavigation } from "@/components/ProductNavigation";
 import { Separator } from "@/components/ui/separator";
 import { ProductModal } from "@/components/ProductModal";
 import { DeleteProduct } from "@/components/delete-product";
+import { db } from "@/libs/db";
 
 interface ProductsPage {
   searchParams: {
@@ -37,16 +39,20 @@ const ProductsPage = async ({
 
   const currentUser = await getCurrentUser();
   
-  const product = await GetProductByIdNew(searchParams.storeId?.productId, searchParams.storeId);
+  const product = await db.product.findFirst({
+    where: {
+      id: searchParams.storeId?.productId
+    }
+  });
 
   return (
     <>
-      <ProductModal initalData={product} />
+      <ProductModal initalData={product as Product} />
       <div className="flex-col">
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center space-y-4 gap-x-2">
           <Heading title="Dashboard" description="Overview of your store" />
-          <ProductNavigation currentUser={currentUser} storeId={searchParams.storeId} product={product} />
+          <ProductNavigation currentUser={currentUser as Account} storeId={searchParams.storeId} product={product as Product} />
         </div>
         <Separator />
         <div className="grid gap-4 grid-cols-3">
@@ -90,7 +96,11 @@ const ProductsPage = async ({
         </Card>
       </div>
       </div>
-      <DeleteProduct storeId={product.storeId} productId={product.id} productName={product.productName}/>
+      <DeleteProduct 
+        storeId={product?.storeId as string} 
+        productId={product?.id as string} 
+        productName={product?.productName as string}
+      />
     </>
   );
 }

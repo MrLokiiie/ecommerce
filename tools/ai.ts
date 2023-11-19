@@ -1,6 +1,7 @@
-import { Product } from "@prisma/client";
+import { Product, ProductImage } from "@prisma/client";
 
 import { db } from "@/libs/db";
+import { u } from "@upstash/redis/zmscore-b6b93f14";
 
 type SearchAiIndex<CTX extends any, Filter extends any, DESC extends any> = {
   /** The Search Content */
@@ -20,11 +21,7 @@ export class SearchAi<Index extends SearchAiIndex<string, SearchAiFilterIndex, s
     const replacedCtx = ctx?.replace("_", " ");
 
     // Create a variable named "products" and get all the products (.findMany()) and await it.
-    const products = await db.product.findMany({
-      include: {
-        productsImage: true
-      }
-    });
+    const products = await db.product.findMany();
 
     // Filter the products.
     const filterProducts = products.filter((product) => 
