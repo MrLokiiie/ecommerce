@@ -28,6 +28,7 @@ model Account {
   stores            Store[]
   purchases         Purchase[]
   personal          PersonalInformation[]
+  cart              Cart[]
 }
 
 model Store {
@@ -58,6 +59,9 @@ model Product {
 
   purchases         Purchase[]
   productsImage     ProductImage[]
+  cart              Cart[]
+  
+  @@unique([id, productName, productPrice])
 }
 
 model Purchase {
@@ -78,6 +82,18 @@ model Purchase {
 model Authencation {
   id                String   @id @default(uuid())
   accessToken       String   @default(cuid())
+}
+
+model Cart {
+  id            String @id @default(uuid())
+  userId        String
+
+  productId     String
+  price         Int
+  name          String
+
+  product       Product @relation(fields: [productId, name, price], references: [id, productName, productPrice])
+  user          Account @relation(fields: [userId], references: [id])
 }
 
 model ProductImage {

@@ -7,7 +7,7 @@ interface SearchResponseInterface {
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Product } from "@prisma/client";
-import { CreditCard, DollarSign, ShoppingBagIcon } from "lucide-react";
+import { CreditCard, DollarSign, ShoppingBagIcon, ViewIcon } from "lucide-react";
 
 import { 
   Card, 
@@ -41,6 +41,9 @@ export const SearchResponse: React.FC<SearchResponseInterface> = ({ products }) 
             </Button>
             <Button className="w-full">
               Add to Cart <ShoppingBagIcon className="ml-2 h-5 w-5" />
+            </Button>
+            <Button className="w-full" onClick={() => router.push(`/shop/product/${product.id}`)}>
+              See Product <ViewIcon className="ml-2 h-5 w-5" />
             </Button>
           </div>
         </Card>
