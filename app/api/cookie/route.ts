@@ -25,7 +25,7 @@ export async function POST(
       }
     });
 
-    if (!account || !account.id) {
+    if (!account || !account.email) {
       return new NextResponse("Email does not exist", { status: 400 });
     }
 

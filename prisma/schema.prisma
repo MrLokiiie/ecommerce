@@ -23,12 +23,14 @@ model Account {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
 
-  account_cookie    String    @unique @map("_cookie")
+  account_cookie    String    @unique @map("_account_cookie")
 
   stores            Store[]
   purchases         Purchase[]
   personal          PersonalInformation[]
   cart              Cart[]
+
+  // @@unique([email, account_cookie])
 }
 
 model Store {
@@ -39,7 +41,7 @@ model Store {
 
   isPublic          Boolean   @default(false)
 
-  owner             Account   @relation(fields: [ownerId], references: [id])
+  owner             Account   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   purchases         Purchase[]
   product           Product[]
@@ -55,7 +57,7 @@ model Product {
   fileContent       String   @db.Text
   fileName          String
 
-  store             Store    @relation(fields: [storeId], references: [id])
+  store             Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
 
   purchases         Purchase[]
   productsImage     ProductImage[]
@@ -93,7 +95,7 @@ model Cart {
   name          String
 
   product       Product @relation(fields: [productId, name, price], references: [id, productName, productPrice])
-  user          Account @relation(fields: [userId], references: [id])
+  user          Account @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model ProductImage {

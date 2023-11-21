@@ -29,6 +29,7 @@
     "react-hot-toast": "^2.4.1",
     "recharts": "^2.9.2",
     "redis": "^4.6.10",
+    "stripe": "^14.5.0",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^4.4.5"
