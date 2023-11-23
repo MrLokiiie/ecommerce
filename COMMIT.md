@@ -24,4 +24,4 @@ export const stripe = new Stripe(StripeKeys.apiKey, {
 Set up the Purchase API or use server actions for the stripe api. Stripe Documentation: [Stripe Documentation](https://stripe.com/docs/test-mode)
 
 ## PUSH-NOTIFCATIONS & Webhook API w/ Stripe:
-Setup QStash properly using [Upstash](upstash.com). Setup the external api server w/ [Python] and manage the webhooks passing through with that. And setup POST requests so when someone purchases that product. The owner of that product will recieve a dashboard notification. 
+Setup QStash properly using [Upstash](https://upstash.com). Setup the external api server w/ ```bash Python``` and manage the webhooks passing through with that. And setup POST requests so when someone purchases that product. The owner of that product will recieve a dashboard notification. 
