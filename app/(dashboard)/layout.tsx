@@ -1,3 +1,5 @@
+import { Account } from "@prisma/client";
+
 import { Navbar } from "@/components/DashboardNavigation/Navbar";
 import { ProductModal } from "@/components/ProductModal";
 import { CreateStoreModal } from "@/components/modals/CreateStoreModal";
@@ -22,7 +24,7 @@ export default async function DashboardLayout({
   
   return (
     <div>
-      <Navbar currentUser={currentUser} product={product} stores={stores} />
+      <Navbar currentUser={currentUser as Account} product={product} stores={stores} />
       <CreateStoreModal stores={stores} />
       <main>
         {children}

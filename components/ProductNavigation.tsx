@@ -1,13 +1,13 @@
 "use client";
 
 import { Settings, Trash2Icon } from "lucide-react";
-
 import { Account, Product } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-
 import { useProductModal } from "@/hooks/useProductModal";
 import { useDeleteProduct } from "@/hooks/deleteProductAlert";
+import Link from "next/link";
 
 interface ProductNavigationProps {
   currentUser: Account;
@@ -21,6 +21,7 @@ export const ProductNavigation: React.FC<ProductNavigationProps> = ({
   currentUser
 }) => {
   const productModal = useProductModal();
+  const router = useRouter();
   const deleteProduct = useDeleteProduct();
 
   console.log(product.productName)
@@ -30,6 +31,16 @@ export const ProductNavigation: React.FC<ProductNavigationProps> = ({
       <div>
         <div className="flex items-center ml-4">
           <span className="text-muted-foreground text-sm text-center">{product.productName}</span>
+          <Button 
+            className="ml-8" 
+            variant="outline"
+          >
+            <Link
+              href={`/dashboard/store/${product.storeId}/products/${product.id}/api`}
+            >
+              View API
+            </Link>
+          </Button>
         </div>
       </div>
       <div className="flex items-center ml-auto">

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { GetProductById } from "@/tools/get-store-name-product-id";
+import { GetProductById, GetStoreNameByProductId } from "@/tools/get-store-name-product-id";
 import { DollarSign } from "lucide-react";
 
 interface ProductPage {
@@ -11,6 +11,7 @@ interface ProductPage {
 
 const ProductPage: React.FC<ProductPage> = async ({ params }) => { 
   const product = await GetProductById(params.productId);
+  const storeName = await GetStoreNameByProductId(params.productId);
   const {
     productName,
     productPrice,
@@ -35,7 +36,7 @@ const ProductPage: React.FC<ProductPage> = async ({ params }) => {
             <CardContent>
               <div className="space-y-4 gap-x-3">
                 <label id="createdBy">
-                  <span className="text-muted-foreground text-md text-gray-400">Created By {product.storeId}</span>
+                  <span className="text-muted-foreground text-md text-gray-400">Created By {storeName}</span>
                 </label>
               </div>
             </CardContent>

@@ -22,6 +22,9 @@ export async function GetProductById(id: string): Promise<Product> {
   const product = await db.product.findFirst({
     where: {
       id
+    },
+    include: {
+      store: true
     }
   });
 

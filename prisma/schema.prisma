@@ -9,6 +9,7 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Account {
@@ -29,8 +30,9 @@ model Account {
   purchases         Purchase[]
   personal          PersonalInformation[]
   cart              Cart[]
+  pro               Pro[]
 
-  // @@unique([email, account_cookie])
+  @@unique([email, account_cookie])
 }
 
 model Store {
@@ -45,6 +47,20 @@ model Store {
 
   purchases         Purchase[]
   product           Product[]
+
+  add               StoreAdd[]
+}
+
+model CustomProductApi {
+  id           String @id @default(uuid())
+  storeId      String
+  productId    String
+
+  routeToken   String @map("route_token") @unique @default(cuid())
+  allowedIps   String @map("allowed_ips")
+  cv       String @map("api_token") @unique @default(cuid())
+  
+  @@index([storeId, productId, allowedIps])
 }
 
 model Product {
@@ -59,9 +75,13 @@ model Product {
 
   store             Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
 
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
   purchases         Purchase[]
   productsImage     ProductImage[]
   cart              Cart[]
+  add               ProductAdd[]
   
   @@unique([id, productName, productPrice])
 }
@@ -79,6 +99,36 @@ model Purchase {
   product           Product  @relation(fields: [productId], references: [id])
   store             Store    @relation(fields: [storeId], references: [id])
   account           Account  @relation(fields: [purchasedUserId], references: [id])
+}
+
+model StoreAdd {
+  id          String @id @default(uuid())
+  storeId     String @unique
+  
+  store       Store @relation(fields: [storeId], references: [id])
+}
+
+model ProductAdd {
+  id          String @id @default(uuid())
+  productId   String
+
+  product     Product @relation(fields: [productId], references: [id])
+}
+
+model Pro {
+  id          String @id @default(uuid())
+  userId      String @unique
+  proToken    String @unique @default(cuid()) @map("proToken")
+  
+  monthly     Boolean?
+  yearly      Boolean?
+  
+  subscribedAt DateTime @default(now())
+  subsriptionRenwedAt DateTime @updatedAt
+
+  user        Account @relation(fields: [userId], references: [id])
+
+  @@unique([userId, proToken])
 }
 
 model Authencation {

@@ -26,10 +26,9 @@ export async function GetProductByIdNew(
    */
   storeId: string
 ): Promise<Product> {
-  const product = await db.product.findUnique({
+  const product = await db.product.findFirst({
     where: {
       id,
-      storeId
     }
   });
 
