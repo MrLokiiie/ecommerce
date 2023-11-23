@@ -21,4 +21,4 @@ export const stripe = new Stripe(StripeKeys.apiKey, {
 ```
 
 ## Upgrade TO-DO:
-Set up the Purchase API or use server actions for the stripe api. Stripe Documentation: [https://stripe.com/docs/test-mode](Stripe Documentation)
+Set up the Purchase API or use server actions for the stripe api. Stripe Documentation: [Stripe Documentation](https://stripe.com/docs/test-mode)
